@@ -61,7 +61,7 @@ const generateGenericExportInterface = (
     ? ``
     : ` & {
   /** WARNING: Only available when \`css-loader\` is used without \`style-loader\` or \`mini-css-extract-plugin\` */
-  locals: ${namespaceName}.${interfaceName};
+  locals: Omit<${namespaceName}.${interfaceName}, 'use' | 'unuse'>;
 }`
 
   const interfaceProperties = cssModuleToTypescriptInterfaceProperties(
