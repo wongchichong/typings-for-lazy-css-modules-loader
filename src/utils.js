@@ -26,7 +26,7 @@ const filenameToPascalCase = (filename) => {
   return camelCase(path.basename(filename), { pascalCase: true })
 }
 
-const camelDigitLower = s => s.replace(/([\d]\w|$)/g, function (_, x) {
+const camelDigitLower = s => s.replace(/([\d]+\w|$)/g, function (_, x) {
   return x.toLowerCase()
 })
 
