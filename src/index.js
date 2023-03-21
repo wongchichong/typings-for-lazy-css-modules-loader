@@ -44,6 +44,10 @@ const schema = {
     lazy: {
       description: "Emit 'use()' & 'unuse()' for *.lazy.css. Defaults to `true`",
       type: "boolean",
+    },
+    lower: {
+      description: "lowercase after digit instead of uppercase, for eg. w100Px -> w100px",
+      type: "boolean"
     }
   },
   additionalProperties: false,
@@ -94,7 +98,8 @@ module.exports = function (content, ...args) {
     cssModuleKeys,
     filenameToPascalCase(filename),
     options.disableLocalsExport,
-    options.lazy && filename.toLowerCase().includes('.lazy.')
+    options.lazy && filename.toLowerCase().includes('.lazy.'),
+    options
   )
 
   applyFormattingAndOptions(cssModuleDefinition, options)

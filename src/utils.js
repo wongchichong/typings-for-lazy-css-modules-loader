@@ -26,14 +26,18 @@ const filenameToPascalCase = (filename) => {
   return camelCase(path.basename(filename), { pascalCase: true })
 }
 
+const camelDigitLower = s => s.replace(/([\d]\w|$)/g, function (_, x) {
+  return x.toLowerCase()
+})
+
 /**
  * @param {string[]} cssModuleKeys
  * @param {string=} indent
  */
-const cssModuleToTypescriptInterfaceProperties = (cssModuleKeys, indent) => {
+const cssModuleToTypescriptInterfaceProperties = (cssModuleKeys, indent, lower = false) => {
   return [...cssModuleKeys]
     .sort()
-    .map((key) => `${indent || ""}'${key}': string;`)
+    .map((key) => `${indent || ""}'${lower ? camelDigitLower(key) : key}': string;`)
     .join("\n")
 }
 
@@ -51,7 +55,8 @@ const generateGenericExportInterface = (
   cssModuleKeys,
   pascalCaseFileName,
   disableLocalsExport,
-  lazy = false
+  lazy,
+  options = {}
 ) => {
   const interfaceName = `I${pascalCaseFileName}`
   const moduleName = `${pascalCaseFileName}Module`
@@ -64,9 +69,12 @@ const generateGenericExportInterface = (
   locals: ${namespaceName}.${interfaceName};
 }`
 
+  const { lower } = options
+
   const interfaceProperties = cssModuleToTypescriptInterfaceProperties(
     cssModuleKeys,
-    "    "
+    "    ",
+    lower
   )
   const lz = lazy ? `
     use: () => void;
